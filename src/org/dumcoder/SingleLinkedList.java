@@ -12,17 +12,16 @@ public class SingleLinkedList<T> implements Iterable<T>{
         head = tail = null;
     }
 
-    public void addHead(T data){
-        if (data == null){
+    public void addHead(Node<T> node){
+        if (node == null){
             return;
         }
 
-        final Node<T> newNode = new Node<T>(data);
         if (head == null){
-            head = newNode;
-            tail = newNode;
+            head = node;
+            tail = node;
         } else {
-            tail.setNext(newNode);
+            tail.setNext(node);
             tail = tail.getNext();
         }
         noOfNodes++;
@@ -42,6 +41,7 @@ public class SingleLinkedList<T> implements Iterable<T>{
         if (node == null){
             return;
         }
+
         if (tail == null){
             head = tail = node;
         } else {
@@ -49,6 +49,40 @@ public class SingleLinkedList<T> implements Iterable<T>{
             tail = tail.getNext();
         }
         noOfNodes++;
+    }
+
+    public boolean hasCycle(){
+        boolean hasCycle = true;
+
+        //Brents Cycle detection Algorithm
+        Node turtle = head;
+        Node bunny = head;
+        int steps_taken = 0;
+        int step_limit = 2;
+
+        while (true){
+            if (bunny == null){
+                hasCycle = false;
+                break;
+            }
+            bunny = bunny.getNext();
+            ++steps_taken;
+
+            if (bunny == turtle){
+                hasCycle = true;
+                break;
+            }
+
+            if(steps_taken == step_limit){
+                steps_taken = 0;
+                step_limit *= 2;
+
+                //teleport turtle
+                turtle = bunny;
+            }
+        }
+        return hasCycle;
+
     }
 
     @Override
